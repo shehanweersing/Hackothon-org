@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables
+.env
+**/.env
+.env.local
+.env.*.local
+
+# Production build
+dist/
+**/dist/
+build/
+**/build/
+
+# TypeScript build info
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
