@@ -20,13 +20,16 @@ import { UserRole } from '../../lib/types';
 
 export const AuthModal: React.FC = () => {
   const { 
+    user,
+    isAuthenticated,
     authModalOpen, 
     closeAuthModal, 
     authModalTab, 
     authTargetRole, 
     login, 
     signup, 
-    loginAsDemo 
+    loginAsDemo,
+    switchRole 
   } = useAuth();
 
   const [tab, setTab] = useState<'login' | 'signup'>(authModalTab);
@@ -160,6 +163,24 @@ export const AuthModal: React.FC = () => {
 
         {/* Modal Body */}
         <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+          {isAuthenticated && user && (
+            <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center justify-between gap-2 animate-fade-in">
+              <div>
+                <p className="font-bold">Already Signed In as {user.fullName || user.email}</p>
+                <p className="text-[10px] text-emerald-700">Role: {user.role.toUpperCase()}</p>
+              </div>
+              {user.role !== authTargetRole && (
+                <button
+                  type="button"
+                  onClick={() => { switchRole(authTargetRole); closeAuthModal(); }}
+                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs"
+                >
+                  Switch to {authTargetRole}
+                </button>
+              )}
+            </div>
+          )}
+
           {error && (
             <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2 animate-fade-in">
               <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />

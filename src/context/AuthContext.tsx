@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthUser, AuthSession, getStoredSession, saveSession, supabaseSignIn, supabaseSignUp, supabaseSignOut, DEMO_ACCOUNTS } from '../lib/auth';
+import { AuthUser, AuthSession, getStoredSession, saveSession, updateUserSessionRole, supabaseSignIn, supabaseSignUp, supabaseSignOut, DEMO_ACCOUNTS } from '../lib/auth';
 import { UserRole } from '../lib/types';
 
 interface AuthContextType {
@@ -10,6 +10,7 @@ interface AuthContextType {
   signup: (email: string, pass: string, role: UserRole, fullName: string, shopName?: string, location?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   loginAsDemo: (demoKey: string) => void;
+  switchRole: (newRole: UserRole, shopName?: string) => void;
   authModalOpen: boolean;
   openAuthModal: (tab?: 'login' | 'signup', targetRole?: UserRole) => void;
   closeAuthModal: () => void;
@@ -43,13 +44,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, 4000);
   };
 
+  const switchRole = (newRole: UserRole, shopName?: string) => {
+    const updated = updateUserSessionRole(newRole, shopName);
+    if (updated) {
+      setSession(updated);
+      showToast(`✨ Account upgraded/switched to ${newRole.toUpperCase()} mode!`);
+    }
+  };
+
   const login = async (email: string, pass: string) => {
     const { user, error } = await supabaseSignIn(email, pass);
     if (error || !user) {
       return { success: false, error: error || 'Authentication failed' };
     }
-    setSession({ user });
-    showToast(`👋 Welcome back, ${user.fullName || user.email}!`);
+
+    let activeUser = user;
+    // If the modal was opened specifically expecting provider or admin role, ensure user gets that role
+    if (authTargetRole && authTargetRole !== 'consumer' && activeUser.role === 'consumer') {
+      const updatedSession = updateUserSessionRole(authTargetRole);
+      if (updatedSession) {
+        activeUser = updatedSession.user;
+      }
+    }
+
+    setSession({ user: activeUser });
+    showToast(`👋 Welcome back, ${activeUser.fullName || activeUser.email}!`);
     setAuthModalOpen(false);
     return { success: true };
   };
@@ -112,6 +131,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signup,
         logout,
         loginAsDemo,
+        switchRole,
         authModalOpen,
         openAuthModal,
         closeAuthModal,

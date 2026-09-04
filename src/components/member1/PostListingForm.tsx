@@ -34,7 +34,7 @@ const SRI_LANKA_LOCATIONS = [
 ];
 
 export const PostListingForm: React.FC<PostListingFormProps> = ({ onSuccess }) => {
-  const { user, role, isAuthenticated, openAuthModal, showToast } = useAuth();
+  const { user, role, isAuthenticated, openAuthModal, showToast, switchRole } = useAuth();
 
   const formatForInput = (date: Date): string => {
     const pad = (n: number) => n.toString().padStart(2, '0');
@@ -70,8 +70,8 @@ export const PostListingForm: React.FC<PostListingFormProps> = ({ onSuccess }) =
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  // Access guard check for Provider
-  if (!isAuthenticated || (role !== 'provider' && role !== 'admin')) {
+  // Access guard check
+  if (!isAuthenticated) {
     return (
       <div className="max-w-xl mx-auto bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center shadow-lg animate-fade-in space-y-4">
         <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto shadow-xs">
@@ -95,6 +95,30 @@ export const PostListingForm: React.FC<PostListingFormProps> = ({ onSuccess }) =
             className="w-full sm:w-auto px-6 py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 font-bold rounded-2xl transition-all cursor-pointer text-xs sm:text-sm"
           >
             <span>Register New Kitchen</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (role !== 'provider' && role !== 'admin') {
+    return (
+      <div className="max-w-xl mx-auto bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center shadow-lg animate-fade-in space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
+          <Sparkles className="w-7 h-7" />
+        </div>
+        <h2 className="text-2xl font-black text-slate-900">Switch to Food Provider Mode</h2>
+        <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
+          You are currently signed in as <strong>{user?.fullName || user?.email}</strong> in Consumer mode. Switch to Food Provider mode to list your surplus items.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <button
+            onClick={() => switchRole('provider')}
+            className="w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Activate Provider Mode</span>
           </button>
         </div>
       </div>

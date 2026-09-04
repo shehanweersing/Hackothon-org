@@ -24,11 +24,11 @@ interface MyListingsViewProps {
 }
 
 export const MyListingsView: React.FC<MyListingsViewProps> = ({ listings, onRefresh, onNavigateToPost }) => {
-  const { user, role, isAuthenticated, openAuthModal, showToast } = useAuth();
+  const { user, role, isAuthenticated, openAuthModal, showToast, switchRole } = useAuth();
   const currentProviderShop = user?.shopName || 'Paan Paan Bakery';
 
-  // Access guard check for Provider
-  if (!isAuthenticated || (role !== 'provider' && role !== 'admin')) {
+  // Access guard check
+  if (!isAuthenticated) {
     return (
       <div className="max-w-xl mx-auto bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center shadow-lg animate-fade-in space-y-4">
         <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto shadow-xs">
@@ -46,6 +46,30 @@ export const MyListingsView: React.FC<MyListingsViewProps> = ({ listings, onRefr
           >
             <LogIn className="w-4 h-4" />
             <span>Sign In as Provider</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (role !== 'provider' && role !== 'admin') {
+    return (
+      <div className="max-w-xl mx-auto bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center shadow-lg animate-fade-in space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto shadow-xs">
+          <Building2 className="w-7 h-7" />
+        </div>
+        <h2 className="text-2xl font-black text-slate-900">Switch to Food Provider View</h2>
+        <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
+          You are currently signed in as <strong>{user?.fullName || user?.email}</strong>. Switch to Food Provider mode to view and manage your surplus listings.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <button
+            onClick={() => switchRole('provider')}
+            className="w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm"
+          >
+            <Building2 className="w-4 h-4" />
+            <span>Switch to Provider Mode</span>
           </button>
         </div>
       </div>

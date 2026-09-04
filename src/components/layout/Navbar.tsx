@@ -29,7 +29,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, listings }) => {
-  const { user, role, isAuthenticated, logout, openAuthModal, loginAsDemo } = useAuth();
+  const { user, role, isAuthenticated, logout, openAuthModal, loginAsDemo, switchRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
@@ -49,13 +49,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, listing
 
   const handleNavClick = (pageId: string) => {
     // Access control checks
-    if ((pageId === 'post' || pageId === 'my-listings') && role !== 'provider' && role !== 'admin') {
-      openAuthModal('login', 'provider');
-      return;
+    if (pageId === 'post' || pageId === 'my-listings') {
+      if (!isAuthenticated) {
+        openAuthModal('login', 'provider');
+        return;
+      }
+      if (role !== 'provider' && role !== 'admin') {
+        switchRole('provider');
+      }
     }
-    if (pageId === 'admin' && role !== 'admin') {
-      openAuthModal('login', 'admin');
-      return;
+    if (pageId === 'admin') {
+      if (!isAuthenticated) {
+        openAuthModal('login', 'admin');
+        return;
+      }
+      if (role !== 'admin') {
+        switchRole('admin');
+      }
     }
 
     onNavigate(pageId);
@@ -162,6 +172,30 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, listing
                           Store: {user.shopName}
                         </p>
                       )}
+                    </div>
+
+                    <div className="pt-1 border-t border-slate-100">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 block mb-1">
+                        Active Account Mode
+                      </span>
+                      <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-xl">
+                        <button
+                          onClick={() => { switchRole('consumer'); setProfileDropdownOpen(false); }}
+                          className={`py-1 text-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                            user.role === 'consumer' ? 'bg-white text-emerald-800 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          Consumer
+                        </button>
+                        <button
+                          onClick={() => { switchRole('provider'); setProfileDropdownOpen(false); }}
+                          className={`py-1 text-center text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                            user.role === 'provider' ? 'bg-white text-amber-800 shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'
+                          }`}
+                        >
+                          Provider
+                        </button>
+                      </div>
                     </div>
 
                     <div className="pt-1">

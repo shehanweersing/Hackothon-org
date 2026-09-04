@@ -90,6 +90,32 @@ export function saveSession(session: AuthSession | null) {
   window.dispatchEvent(new Event('surplus_auth_changed'));
 }
 
+export function updateUserSessionRole(newRole: UserRole, shopName?: string): AuthSession | null {
+  const current = getStoredSession();
+  if (!current || !current.user) return null;
+
+  const updatedUser: AuthUser = {
+    ...current.user,
+    role: newRole,
+    shopName: shopName || current.user.shopName || (newRole === 'provider' ? 'My Local Bakery' : undefined),
+  };
+
+  const updatedSession: AuthSession = {
+    ...current,
+    user: updatedUser,
+  };
+
+  const accounts = getRegisteredAccounts();
+  const cleanEmail = updatedUser.email.toLowerCase().trim();
+  if (accounts[cleanEmail]) {
+    accounts[cleanEmail].user = updatedUser;
+    localStorage.setItem(REGISTERED_ACCOUNTS_KEY, JSON.stringify(accounts));
+  }
+
+  saveSession(updatedSession);
+  return updatedSession;
+}
+
 function getRegisteredAccounts(): Record<string, StoredUserAccount> {
   try {
     const raw = localStorage.getItem(REGISTERED_ACCOUNTS_KEY);
