@@ -1,6 +1,6 @@
-# 🥗 Surplus LK — Sri Lanka Surplus Food Rescue Platform
+#  Surplus LK — Sri Lanka Surplus Food Rescue Platform
 
-## 🌐 Project Links
+##  Project Links
 
 **Deployed Application:**  
 https://www.findme.ninja
@@ -18,7 +18,7 @@ https://mysliit-my.sharepoint.com/:v:/g/personal/it24104159_my_sliit_lk/IQBnwQm4
 
 ---
 
-## 📌 Project Overview
+##  Project Overview
 
 Surplus LK is a full-stack surplus food marketplace connecting small bakeries, eateries, and home kitchens in Sri Lanka with local consumers to sell end-of-day surplus food at high discounts (40%–70% off) instead of throwing it away.
 
@@ -36,13 +36,13 @@ Instead of allowing this food to become waste, Surplus LK provides a digital pla
 
 ### Surplus LK bridges this gap:
 
-- 🏪 **Food Providers** — Recover part of their food preparation costs and clear end-of-day stock.
-- 🛒 **Consumers** — Discover quality meals and bakery products at significant discounts.
-- 🌱 **Environment** — Help divert edible food from waste streams and reduce unnecessary food disposal.
+-  **Food Providers** — Recover part of their food preparation costs and clear end-of-day stock.
+-  **Consumers** — Discover quality meals and bakery products at significant discounts.
+-  **Environment** — Help divert edible food from waste streams and reduce unnecessary food disposal.
 
 ---
 
-# 🎯 Main Objective
+#  Main Objective
 
 The main objective of Surplus LK is to create a digital platform that connects food providers with consumers so that surplus food can be sold at discounted prices before it becomes waste.
 
@@ -59,9 +59,9 @@ The system focuses on:
 
 ---
 
-# 👥 Target Users
+#  Target Users
 
-## 🏪 Food Providers
+##  Food Providers
 
 Examples include:
 
@@ -86,7 +86,7 @@ Providers can create listings containing information such as:
 
 ---
 
-## 🛒 Consumers
+##  Consumers
 
 Consumers can:
 
@@ -100,7 +100,7 @@ Consumers can:
 
 ---
 
-## 👨‍💼 Administrators
+##  Administrators
 
 Administrators can monitor:
 
@@ -115,7 +115,7 @@ Administrators can monitor:
 
 ---
 
-# 🔄 How Surplus LK Works
+#  How Surplus LK Works
 
 The overall process is:
 
