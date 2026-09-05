@@ -3,6 +3,7 @@
 ## 🌐 Project Links
 
 **Deployed Application:**  
+https://www.findme.ninja
 https://hackothon-org.vercel.app/
 
 **GitHub Repository:**  
